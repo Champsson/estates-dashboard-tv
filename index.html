@@ -75,7 +75,7 @@ body { display:flex; flex-direction:column; height:100vh; }
   .header-right { position:static; margin-top:4px; }
 }
 </style>
-<!-- build:1774812166 -->
+<!-- build:1774816950 -->
 </head>
 <body>
 
@@ -221,6 +221,40 @@ function createStackedBarChart(canvasId, data, colorMap) {
   });
 }
 
+// Filter an owner-keyed dict to only include owners with data (non-zero)
+function filterActive(obj) {
+  return Object.fromEntries(Object.entries(obj).filter(([,v])=>v>0));
+}
+// For stacked dict (owner -> {key: count}), keep owners with any non-zero value
+function filterActiveStacked(obj) {
+  return Object.fromEntries(Object.entries(obj).filter(([,v])=>
+    typeof v==='object' && Object.values(v).some(x=>x>0)
+  ));
+}
+// Build union of active owners across all flat reports
+function getActiveOwners(data) {
+  const sets = [
+    data.form_submissions_24h||{},
+    data.marketing_email_forms||{},
+    data.active_contacts_fy||{},
+    data.active_contacts_all||{},
+    data.sql_30d||{},
+    data.speed_to_lead||{},
+    data.tasks_overdue?.by_owner||{}
+  ];
+  const active = new Set();
+  sets.forEach(obj=>Object.entries(obj).forEach(([k,v])=>{ if(v>0) active.add(k); }));
+  // also from stacked
+  [data.activities_30d||{}, data.deals_30d||{}].forEach(obj=>
+    Object.entries(obj).forEach(([k,v])=>{ if(typeof v==='object'&&Object.values(v).some(x=>x>0)) active.add(k); })
+  );
+  return active;
+}
+// Restrict any owner-keyed dict to only active owners
+function restrictTo(obj, active) {
+  return Object.fromEntries(Object.entries(obj).filter(([k])=>active.has(k)));
+}
+
 function updateDashboard() {
   fetch('https://gist.githubusercontent.com/Champsson/3233d20a32384dd00f60885470a19e59/raw/dashboard-data.json?t=' + Date.now())
     .then(r=>r.json())
@@ -231,11 +265,20 @@ function updateDashboard() {
         ts.textContent='Updated: '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
       }
 
-      // Speed to Lead
-      const sl=data.speed_to_lead||{}, slLabels=Object.keys(sl), slValues=Object.values(sl);
+      // Build set of owners with ANY data across ALL reports
+      const active = getActiveOwners(data);
+
+      // Helper to restrict + filter zeros from flat dicts
+      const trim = obj => filterActive(restrictTo(obj||{}, active));
+      const trimStacked = obj => filterActiveStacked(restrictTo(obj||{}, active));
+
+      // Speed to Lead — show only active owners with data
+      const slRaw = restrictTo(data.speed_to_lead||{}, active);
+      const slFiltered = Object.fromEntries(Object.entries(slRaw).filter(([,v])=>v>0));
       if(charts.speedToLeadChart) charts.speedToLeadChart.destroy();
       const slCanvas=document.getElementById('speedToLeadChart');
-      if(slCanvas && slLabels.length) {
+      if(slCanvas && Object.keys(slFiltered).length) {
+        const slLabels=Object.keys(slFiltered), slValues=Object.values(slFiltered);
         charts.speedToLeadChart=new Chart(slCanvas,{
           type:'bar',
           data:{labels:slLabels,datasets:[{data:slValues,backgroundColor:slValues.map(v=>v<=8?'#60C0A8':'#DC3545'),borderWidth:0,borderRadius:2}]},
@@ -246,17 +289,17 @@ function updateDashboard() {
         });
       }
 
-      createThresholdBarChart('formChart',  data.form_submissions_24h||{}, 1, 'below');
-      createThresholdBarChart('emailChart', data.marketing_email_forms||{}, 1, 'below');
-      createThresholdBarChart('tasksChart', data.tasks_overdue?.by_owner||{}, 40, 'below');
-      createThresholdBarChart('activeFyChart',  data.active_contacts_fy||{},  5, 'below');
-      createThresholdBarChart('activeAllChart', data.active_contacts_all||{}, 5, 'below');
-      createThresholdBarChart('sqlChart', data.sql_30d||{}, 6.75, 'above');
+      createThresholdBarChart('formChart',  trim(data.form_submissions_24h), 1, 'below');
+      createThresholdBarChart('emailChart', trim(data.marketing_email_forms), 1, 'below');
+      createThresholdBarChart('tasksChart', filterActive(restrictTo(data.tasks_overdue?.by_owner||{}, active)), 40, 'below');
+      createThresholdBarChart('activeFyChart',  trim(data.active_contacts_fy),  5, 'below');
+      createThresholdBarChart('activeAllChart', trim(data.active_contacts_all), 5, 'below');
+      createThresholdBarChart('sqlChart', trim(data.sql_30d), 6.75, 'above');
 
-      createStackedBarChart('activitiesChart', data.activities_30d||{}, {
+      createStackedBarChart('activitiesChart', trimStacked(data.activities_30d), {
         'calls':'#60C0A8','emails':'#45A08C','tasks':'#338070','notes':'#80D0BC','meetings':'#A0E0D0'
       });
-      createStackedBarChart('dealsChart', data.deals_30d||{}, {
+      createStackedBarChart('dealsChart', trimStacked(data.deals_30d), {
         'Visit Dates Planned':'#A0E0D0','Tour Scheduled':'#80D0BC',
         'Final Decision':'#60C0A8','Offer':'#45A08C','Reservation/Offer Accepted':'#338070'
       });
