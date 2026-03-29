@@ -57,20 +57,23 @@
     flex:1; min-height:0;
     display:grid;
     grid-template-columns:repeat(6,1fr);
+    grid-template-rows:repeat(3,1fr);
     gap:6px; padding:6px;
+    overflow:hidden;
   }
   .card {
     background:#fff; border-radius:6px;
     border:1px solid #E9ECEF; padding:6px 8px;
     display:flex; flex-direction:column;
     grid-column:span 2;
+    min-height:0; overflow:hidden;
   }
   .card-title {
     font-size:9px; font-weight:600; color:#6C757D;
     text-transform:uppercase; letter-spacing:.4px;
     margin-bottom:4px; flex-shrink:0;
   }
-  .chart-wrap { flex:1; min-height:0; position:relative; }
+  .chart-wrap { flex:1; min-height:0; overflow:hidden; position:relative; }
   .chart-wrap canvas { width:100%!important; height:100%!important; }
 
   @media (max-width:768px) {
@@ -85,7 +88,7 @@
     .header-right { position:static; margin-top:4px; }
   }
 </style>
-<!-- build:1774809998 -->
+<!-- build:1774810066 -->
 </head>
 <body>
 
