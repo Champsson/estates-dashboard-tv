@@ -2,93 +2,80 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Mojo Estates Dashboard TV</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html,body { height:100%; font-family:'Poppins',sans-serif; background:#F8F9FA; color:#212529; overflow:hidden; }
-  body { display:flex; flex-direction:column; height:100vh; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { height:100%; font-family:'Poppins',sans-serif; background:#F8F9FA; color:#212529; overflow:hidden; }
+body { display:flex; flex-direction:column; height:100vh; }
 
-  .header {
-    height:56px; min-height:56px;
-    background:#fff; border-bottom:1px solid #E9ECEF;
-    display:flex; align-items:center; justify-content:center;
-    padding:0 20px; position:relative; flex-shrink:0;
-  }
-  .header-center { display:flex; align-items:center; gap:10px; }
-  .logo-img { height:44px; width:auto; object-fit:contain; }
-  @font-face {
-    font-family:'FG Rebecca Script';
-    src:url('https://db.onlinewebfonts.com/t/f54aee5803c6bf6508a5c1e2a1232e39.woff2') format('woff2'),
-        url('https://db.onlinewebfonts.com/t/f54aee5803c6bf6508a5c1e2a1232e39.woff') format('woff'),
-        url('https://db.onlinewebfonts.com/t/f54aee5803c6bf6508a5c1e2a1232e39.ttf') format('truetype');
-  }
-  .dashboard-label {
-    font-family:'FG Rebecca Script',cursive;
-    font-size:18px; color:#212529; white-space:nowrap;
-  }
-  .header-right {
-    position:absolute; right:16px; top:50%; transform:translateY(-50%);
-    display:flex; align-items:center; gap:6px; font-size:10px; color:#6C757D;
-  }
-  .live-dot { width:7px; height:7px; background:#60C0A8; border-radius:50%; animation:pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+@font-face {
+  font-family:"FG Rebecca Script";
+  src:url("https://db.onlinewebfonts.com/t/f54aee5803c6bf6508a5c1e2a1232e39.woff2") format("woff2"),
+      url("https://db.onlinewebfonts.com/t/f54aee5803c6bf6508a5c1e2a1232e39.woff") format("woff"),
+      url("https://db.onlinewebfonts.com/t/f54aee5803c6bf6508a5c1e2a1232e39.ttf") format("truetype");
+}
 
+.header {
+  height:56px; min-height:56px; flex-shrink:0;
+  background:#fff; border-bottom:1px solid #E9ECEF;
+  display:flex; align-items:center; justify-content:center;
+  padding:0 20px; position:relative;
+}
+.header-center { display:flex; align-items:center; gap:10px; }
+.logo-img { height:44px; width:auto; object-fit:contain; }
+.dashboard-label { font-family:"FG Rebecca Script",cursive; font-size:18px; color:#212529; white-space:nowrap; }
+.header-right {
+  position:absolute; right:16px; top:50%; transform:translateY(-50%);
+  display:flex; align-items:center; gap:6px; font-size:10px; color:#6C757D;
+}
+.live-dot { width:7px; height:7px; background:#60C0A8; border-radius:50%; animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
+.kpi-band {
+  flex-shrink:0;
+  background:#fff; border-bottom:1px solid #E9ECEF;
+  display:flex; align-items:center; justify-content:center;
+  padding:4px 10px;
+}
+.kpi-stage { display:flex; flex-direction:column; align-items:center; padding:4px 14px; border-right:1px solid #E9ECEF; min-width:90px; }
+.kpi-stage:last-child { border-right:none; }
+.kpi-stage-label { font-size:8px; color:#6C757D; font-weight:500; text-transform:uppercase; letter-spacing:.5px; }
+.kpi-stage-value { font-size:20px; font-weight:700; color:#212529; line-height:1.1; }
+.kpi-stage-pct  { font-size:9px; color:#60C0A8; font-weight:600; }
+.kpi-stage-pct2 { font-size:8px; color:#ADB5BD; font-weight:500; }
+.kpi-arrow { font-size:18px; color:#ADB5BD; padding:0 2px; }
 
-  .kpi-band {
-    background:#fff; border-bottom:1px solid #E9ECEF;
-    display:flex; align-items:center; justify-content:center;
-    padding:4px 10px; gap:0; flex-shrink:0;
-  }
-  .kpi-stage {
-    display:flex; flex-direction:column; align-items:center;
-    padding:4px 14px; border-right:1px solid #E9ECEF; min-width:90px;
-  }
-  .kpi-stage:last-child { border-right:none; }
-  .kpi-stage-label { font-size:8px; color:#6C757D; font-weight:500; text-transform:uppercase; letter-spacing:.5px; }
-  .kpi-stage-value { font-size:20px; font-weight:700; color:#212529; line-height:1.1; }
-  .kpi-stage-pct { font-size:9px; color:#60C0A8; font-weight:600; }
-  .kpi-stage-pct2 { font-size:8px; color:#ADB5BD; font-weight:500; }
-  .kpi-arrow { font-size:18px; color:#ADB5BD; padding:0 2px; }
+.dashboard {
+  flex:1; min-height:0; overflow:hidden;
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  grid-template-rows:repeat(3,1fr);
+  gap:6px; padding:6px;
+}
+.card {
+  background:#fff; border-radius:6px; border:1px solid #E9ECEF;
+  padding:6px 8px; display:flex; flex-direction:column;
+  grid-column:span 2; min-height:0; overflow:hidden;
+}
+.card-title { font-size:9px; font-weight:600; color:#6C757D; text-transform:uppercase; letter-spacing:.4px; margin-bottom:4px; flex-shrink:0; }
+.chart-wrap { flex:1; min-height:0; overflow:hidden; position:relative; }
+.chart-wrap canvas { width:100%!important; height:100%!important; }
 
-  .dashboard {
-    flex:1; min-height:0;
-    display:grid;
-    grid-template-columns:repeat(6,1fr);
-    grid-template-rows:repeat(3,1fr);
-    gap:6px; padding:6px;
-    overflow:hidden;
-  }
-  .card {
-    background:#fff; border-radius:6px;
-    border:1px solid #E9ECEF; padding:6px 8px;
-    display:flex; flex-direction:column;
-    grid-column:span 2;
-    min-height:0; overflow:hidden;
-  }
-  .card-title {
-    font-size:9px; font-weight:600; color:#6C757D;
-    text-transform:uppercase; letter-spacing:.4px;
-    margin-bottom:4px; flex-shrink:0;
-  }
-  .chart-wrap { flex:1; min-height:0; overflow:hidden; position:relative; }
-  .chart-wrap canvas { width:100%!important; height:100%!important; }
-
-  @media (max-width:768px) {
-    html,body { height:auto; overflow:auto; }
-    .header { height:auto; padding:8px 12px; }
-    .logo-img { height:32px; }
-    .kpi-band { flex-wrap:wrap; }
-    .kpi-stage { width:33.33%; border-right:none; border-bottom:1px solid #E9ECEF; }
-    .kpi-arrow { display:none; }
-    .dashboard { grid-template-columns:1fr!important; height:auto!important; }
-    .card { grid-column:span 1!important; min-height:220px; }
-    .header-right { position:static; margin-top:4px; }
-  }
+@media (max-width:768px) {
+  html,body { height:auto; overflow:auto; }
+  .header { height:auto; padding:8px 12px; }
+  .logo-img { height:32px; }
+  .kpi-band { flex-wrap:wrap; }
+  .kpi-stage { width:33.33%; border-right:none; border-bottom:1px solid #E9ECEF; }
+  .kpi-arrow { display:none; }
+  .dashboard { grid-template-columns:1fr!important; grid-template-rows:auto!important; height:auto!important; }
+  .card { grid-column:span 1!important; min-height:220px; }
+  .header-right { position:static; margin-top:4px; }
+}
 </style>
-<!-- build:1774810066 -->
+<!-- build:1774810841 -->
 </head>
 <body>
 
@@ -160,7 +147,6 @@
     <div class="card-title">Marketing Email Forms (KPI: &lt;1 by Wed 12:00)</div>
     <div class="chart-wrap"><canvas id="emailChart"></canvas></div>
   </div>
-
   <div class="card">
     <div class="card-title">Tasks Overdue (KPI: &lt;40)</div>
     <div class="chart-wrap"><canvas id="tasksChart"></canvas></div>
@@ -173,7 +159,6 @@
     <div class="card-title">Active Contacts All — 30D Ago (KPI: &lt;5)</div>
     <div class="chart-wrap"><canvas id="activeAllChart"></canvas></div>
   </div>
-
   <div class="card">
     <div class="card-title">Activities (Non-Automated) — Last 30D</div>
     <div class="chart-wrap"><canvas id="activitiesChart"></canvas></div>
@@ -183,138 +168,112 @@
     <div class="chart-wrap"><canvas id="sqlChart"></canvas></div>
   </div>
   <div class="card" id="dealsCard">
-    <div class="card-title">All Lead → Deals — Last 30D</div>
+    <div class="card-title">All Lead → Deals — Last 30D (Estates Pipeline)</div>
     <div class="chart-wrap"><canvas id="dealsChart"></canvas></div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-  const charts = {};
-  const colors = { primary:'#60C0A8' };
+const charts = {};
 
-  function createThresholdBarChart(canvasId, data, threshold, dir='above') {
-    if (charts[canvasId]) charts[canvasId].destroy();
-    const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
-    const labels = Object.keys(data), values = Object.values(data);
-    if (!labels.length) return;
-    const GREEN='#60C0A8', RED='#DC3545';
-    const barColors = values.map(v => dir==='above' ? (v>=threshold?GREEN:RED) : (v<=threshold?GREEN:RED));
-    charts[canvasId] = new Chart(canvas, {
-      type:'bar',
-      data:{ labels, datasets:[{data:values,backgroundColor:barColors,borderWidth:0,borderRadius:3}] },
-      options:{
-        responsive:true, maintainAspectRatio:false, animation:false,
-        plugins:{legend:{display:false},tooltip:{enabled:true}},
-        scales:{
-          x:{grid:{display:false},ticks:{font:{size:9}}},
-          y:{beginAtZero:true,grid:{color:'#E9ECEF'},ticks:{precision:0,font:{size:9}}}
-        }
+function createThresholdBarChart(canvasId, data, threshold, dir='above') {
+  if (charts[canvasId]) charts[canvasId].destroy();
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const labels=Object.keys(data), values=Object.values(data);
+  if (!labels.length) return;
+  const G='#60C0A8', R='#DC3545';
+  const colors = values.map(v => dir==='above' ? (v>=threshold?G:R) : (v<=threshold?G:R));
+  charts[canvasId] = new Chart(canvas, {
+    type:'bar',
+    data:{labels,datasets:[{data:values,backgroundColor:colors,borderWidth:0,borderRadius:2}]},
+    options:{
+      responsive:true, maintainAspectRatio:false, animation:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:7},maxRotation:45}},
+        y:{beginAtZero:true,grid:{color:'#E9ECEF'},ticks:{precision:0,font:{size:8}}}
       }
-    });
-  }
+    }
+  });
+}
 
-  function createBarChart(canvasId, data, color, showTotal=false) {
-    if (charts[canvasId]) charts[canvasId].destroy();
-    const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
-    const labels=Object.keys(data), values=Object.values(data);
-    if (!labels.length) return;
-    charts[canvasId] = new Chart(canvas, {
-      type:'bar',
-      data:{ labels, datasets:[{data:values,backgroundColor:color,borderWidth:0,borderRadius:3}] },
-      options:{
-        responsive:true, maintainAspectRatio:false, animation:false,
-        plugins:{legend:{display:false},tooltip:{enabled:true}},
-        scales:{
-          x:{grid:{display:false},ticks:{font:{size:9}}},
-          y:{beginAtZero:true,grid:{color:'#E9ECEF'},ticks:{precision:0,font:{size:9}}}
-        }
+function createStackedBarChart(canvasId, data, colorMap) {
+  if (charts[canvasId]) charts[canvasId].destroy();
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const owners=Object.keys(data), activities=Object.keys(colorMap);
+  charts[canvasId] = new Chart(canvas, {
+    type:'bar',
+    data:{
+      labels:owners,
+      datasets:activities.map(a=>({label:a,data:owners.map(o=>data[o][a]||0),backgroundColor:colorMap[a],borderWidth:0}))
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false, animation:false,
+      plugins:{legend:{display:true,position:'top',labels:{font:{size:7},boxWidth:8,padding:3}}},
+      scales:{
+        x:{stacked:true,grid:{display:false},ticks:{font:{size:7},maxRotation:45}},
+        y:{stacked:true,beginAtZero:true,grid:{color:'#E9ECEF'},ticks:{precision:0,font:{size:8}}}
       }
-    });
-  }
+    }
+  });
+}
 
-  function createStackedBarChart(canvasId, data, colorMap) {
-    if (charts[canvasId]) charts[canvasId].destroy();
-    const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
-    const owners=Object.keys(data), activities=Object.keys(colorMap);
-    const datasets=activities.map(a=>({
-      label:a, data:owners.map(o=>data[o][a]||0),
-      backgroundColor:colorMap[a], borderWidth:0
-    }));
-    charts[canvasId] = new Chart(canvas, {
-      type:'bar',
-      data:{labels:owners, datasets},
-      options:{
-        responsive:true, maintainAspectRatio:false, animation:false,
-        plugins:{legend:{display:true,position:'top',labels:{font:{size:8},boxWidth:10,padding:4}}},
-        scales:{
-          x:{stacked:true,grid:{display:false},ticks:{font:{size:9}}},
-          y:{stacked:true,beginAtZero:true,grid:{color:'#E9ECEF'},ticks:{precision:0,font:{size:9}}}
-        }
+function updateDashboard() {
+  fetch('https://gist.githubusercontent.com/Champsson/3233d20a32384dd00f60885470a19e59/raw/dashboard-data.json?t=' + Date.now())
+    .then(r=>r.json())
+    .then(data => {
+      const ts=document.getElementById('timestamp');
+      if (ts && data.last_updated) {
+        const d=new Date(data.last_updated);
+        ts.textContent='Updated: '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
       }
-    });
-  }
 
-  function updateSpeedToLead(data) {
-    const KPI=8, d=data||{}, labels=Object.keys(d), values=Object.values(d);
-    if(charts['speedToLeadChart']) charts['speedToLeadChart'].destroy();
-    const canvas=document.getElementById('speedToLeadChart');
-    if(!canvas||!labels.length) return;
-    const barColors=values.map(v=>v<=KPI?'#60C0A8':'#DC3545');
-    charts['speedToLeadChart']=new Chart(canvas,{
-      type:'bar',
-      data:{labels,datasets:[{data:values,backgroundColor:barColors,borderWidth:0,borderRadius:3}]},
-      options:{
-        responsive:true,maintainAspectRatio:false,animation:false,
-        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+' hrs'}}},
-        scales:{
-          x:{grid:{display:false},ticks:{font:{size:9}}},
-          y:{beginAtZero:true,ticks:{font:{size:9},callback:v=>v+'h'},grid:{color:'#E9ECEF'}}
-        }
-      }
-    });
-  }
-
-  function updateDashboard() {
-    fetch('https://gist.githubusercontent.com/Champsson/3233d20a32384dd00f60885470a19e59/raw/dashboard-data.json?t=' + Date.now())
-      .then(r=>r.json())
-      .then(data => {
-        const ts = document.getElementById('timestamp');
-        if (ts && data.last_updated) {
-          const d=new Date(data.last_updated);
-          ts.textContent='Updated: '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-        }
-        updateSpeedToLead(data.speed_to_lead||{});
-        createThresholdBarChart('formChart', data.form_submissions_24h||{}, 1, 'below');
-        createThresholdBarChart('emailChart', data.marketing_email_forms||{}, 1, 'below');
-        createThresholdBarChart('tasksChart', data.tasks_overdue?.by_team||{}, 40, 'below');
-        createThresholdBarChart('activeFyChart', data.active_contacts_fy||{}, 5, 'below');
-        createThresholdBarChart('activeAllChart', data.active_contacts_all||{}, 5, 'below');
-        createStackedBarChart('activitiesChart', data.activities_30d||{}, {
-          'calls':'#60C0A8','emails':'#45A08C','tasks':'#338070','notes':'#80D0BC','meetings':'#A0E0D0'
+      // Speed to Lead
+      const sl=data.speed_to_lead||{}, slLabels=Object.keys(sl), slValues=Object.values(sl);
+      if(charts.speedToLeadChart) charts.speedToLeadChart.destroy();
+      const slCanvas=document.getElementById('speedToLeadChart');
+      if(slCanvas && slLabels.length) {
+        charts.speedToLeadChart=new Chart(slCanvas,{
+          type:'bar',
+          data:{labels:slLabels,datasets:[{data:slValues,backgroundColor:slValues.map(v=>v<=8?'#60C0A8':'#DC3545'),borderWidth:0,borderRadius:2}]},
+          options:{responsive:true,maintainAspectRatio:false,animation:false,
+            plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+'h'}}},
+            scales:{x:{grid:{display:false},ticks:{font:{size:7},maxRotation:45}},
+                    y:{beginAtZero:true,grid:{color:'#E9ECEF'},ticks:{font:{size:8},callback:v=>v+'h'}}}}
         });
-        createThresholdBarChart('sqlChart', data.sql_30d||{}, 6.75, 'above');
-        // Deals stacked
-        createStackedBarChart('dealsChart', data.deals_30d||{}, {
-          'Visit Dates Planned':'#A0E0D0','Tour Scheduled':'#80D0BC',
-          'Final Decision':'#60C0A8','Offer':'#45A08C','Reservation/Offer Accepted':'#338070'
-        });
-        const dealsCard=document.getElementById('dealsCard');
-        if(dealsCard){
-          const totals=Object.values(data.deals_30d||{}).map(s=>Object.values(s).reduce((a,b)=>a+b,0));
-          const avg=totals.length?totals.reduce((a,b)=>a+b,0)/totals.length:0;
-          dealsCard.style.borderTop=`3px solid ${avg>=2.25?'#60C0A8':'#DC3545'}`;
-        }
-      })
-      .catch(e=>console.error('Error:',e));
-  }
+      }
 
-  async function init() { await updateDashboard(); }
-  init();
-  setInterval(updateDashboard, 30000);
+      createThresholdBarChart('formChart',  data.form_submissions_24h||{}, 1, 'below');
+      createThresholdBarChart('emailChart', data.marketing_email_forms||{}, 1, 'below');
+      createThresholdBarChart('tasksChart', data.tasks_overdue?.by_owner||{}, 40, 'below');
+      createThresholdBarChart('activeFyChart',  data.active_contacts_fy||{},  5, 'below');
+      createThresholdBarChart('activeAllChart', data.active_contacts_all||{}, 5, 'below');
+      createThresholdBarChart('sqlChart', data.sql_30d||{}, 6.75, 'above');
+
+      createStackedBarChart('activitiesChart', data.activities_30d||{}, {
+        'calls':'#60C0A8','emails':'#45A08C','tasks':'#338070','notes':'#80D0BC','meetings':'#A0E0D0'
+      });
+      createStackedBarChart('dealsChart', data.deals_30d||{}, {
+        'Visit Dates Planned':'#A0E0D0','Tour Scheduled':'#80D0BC',
+        'Final Decision':'#60C0A8','Offer':'#45A08C','Reservation/Offer Accepted':'#338070'
+      });
+
+      const dc=document.getElementById('dealsCard');
+      if(dc){
+        const totals=Object.values(data.deals_30d||{}).map(s=>Object.values(s).reduce((a,b)=>a+b,0));
+        const avg=totals.length?totals.reduce((a,b)=>a+b,0)/totals.length:0;
+        dc.style.borderTop=`3px solid ${avg>=2.25?'#60C0A8':'#DC3545'}`;
+      }
+    })
+    .catch(e=>console.error('Error:',e));
+}
+
+async function init() { await updateDashboard(); }
+init();
+setInterval(updateDashboard,30000);
 </script>
 </body>
 </html>
