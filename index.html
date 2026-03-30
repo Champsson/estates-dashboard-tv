@@ -75,7 +75,7 @@ body { display:flex; flex-direction:column; height:100vh; }
   .header-right { position:static; margin-top:4px; }
 }
 </style>
-<!-- build:1774874193 -->
+<!-- build:1774874350 -->
 </head>
 <body>
 
@@ -136,7 +136,7 @@ body { display:flex; flex-direction:column; height:100vh; }
 
 <div class="dashboard">
   <div class="card">
-    <div class="card-title">Speed to Lead — Last Month (hours · KPI: &lt;168h/7d 🟢 &gt;168h 🔴)</div>
+    <div class="card-title">Speed to Lead — Last 7 Days (hours · KPI: &lt;8h 🟢 &gt;8h 🔴)</div>
     <div class="chart-wrap"><canvas id="speedToLeadChart"></canvas></div>
   </div>
   <div class="card">
@@ -317,7 +317,7 @@ function updateDashboard() {
       const trim = obj => filterActive(restrictTo(obj||{}, active));
       const trimStacked = obj => filterActiveStacked(restrictTo(obj||{}, active));
 
-      // Speed to Lead — KPI: ≤168h (7 days) green, >168h red
+      // Speed to Lead — KPI: ≤8h green, >8h red (last 7 days)
       const slRaw = restrictTo(data.speed_to_lead||{}, active);
       const slFiltered = Object.fromEntries(Object.entries(slRaw).filter(([,v])=>v>0));
       if(charts.speedToLeadChart) charts.speedToLeadChart.destroy();
@@ -326,7 +326,7 @@ function updateDashboard() {
         const slLabels=Object.keys(slFiltered), slValues=Object.values(slFiltered);
         charts.speedToLeadChart=new Chart(slCanvas,{
           type:'bar',
-          data:{labels:slLabels,datasets:[{data:slValues,backgroundColor:slValues.map(v=>v<=168?'#60C0A8':'#DC3545'),borderWidth:0,borderRadius:2}]},
+          data:{labels:slLabels,datasets:[{data:slValues,backgroundColor:slValues.map(v=>v<=8?'#60C0A8':'#DC3545'),borderWidth:0,borderRadius:2}]},
           options:{responsive:true,maintainAspectRatio:false,animation:false,
             plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+'h'}}, dataLabels:{display:true}},
             layout:{padding:{top:12}},
