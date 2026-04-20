@@ -303,7 +303,7 @@ function restrictTo(obj, active) {
 }
 
 function updateDashboard() {
-  fetch('/api/data')
+  fetch('https://gist.githubusercontent.com/Champsson/3233d20a32384dd00f60885470a19e59/raw/dashboard-data.json?t=' + Date.now())
     .then(r=>r.json())
     .then(data => {
       const ts=document.getElementById('timestamp');
