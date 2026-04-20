@@ -237,10 +237,10 @@ function createThresholdBarChart(canvasId, data, threshold, dir='above') {
       responsive:true, maintainAspectRatio:false, animation:false,
       plugins:{legend:{display:false}, dataLabels:{display:true}},
       scales:{
-        x:{grid:{display:false},ticks:{font:{size:10},maxRotation:45}},
-        y:{beginAtZero:true,grid:{color:'#E9ECEF'},ticks:{precision:0,font:{size:11}}}
+        x:{grid:{display:false},ticks:{font:{size:7},maxRotation:45}},
+        y:{beginAtZero:true,grid:{color:'#E9ECEF'},ticks:{precision:0,font:{size:8}}}
       },
-      layout:{padding:{top:14}}
+      layout:{padding:{top:12}}
     }
   });
 }
@@ -258,12 +258,12 @@ function createStackedBarChart(canvasId, data, colorMap) {
     },
     options:{
       responsive:true, maintainAspectRatio:false, animation:false,
-      plugins:{legend:{display:true,position:'top',labels:{font:{size:10},boxWidth:10,padding:4}}, dataLabels:{display:true}},
+      plugins:{legend:{display:true,position:'top',labels:{font:{size:7},boxWidth:8,padding:3}}, dataLabels:{display:true}},
       scales:{
-        x:{stacked:true,grid:{display:false},ticks:{font:{size:10},maxRotation:45}},
-        y:{stacked:true,beginAtZero:true,grid:{color:'#E9ECEF'},ticks:{precision:0,font:{size:11}}}
+        x:{stacked:true,grid:{display:false},ticks:{font:{size:7},maxRotation:45}},
+        y:{stacked:true,beginAtZero:true,grid:{color:'#E9ECEF'},ticks:{precision:0,font:{size:8}}}
       },
-      layout:{padding:{top:14}}
+      layout:{padding:{top:12}}
     }
   });
 }
@@ -332,8 +332,8 @@ function updateDashboard() {
           options:{responsive:true,maintainAspectRatio:false,animation:false,
             plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+'h'}}, dataLabels:{display:true}},
             layout:{padding:{top:12}},
-            scales:{x:{grid:{display:false},ticks:{font:{size:10},maxRotation:45}},
-                    y:{beginAtZero:true,grid:{color:'#E9ECEF'},ticks:{font:{size:11},callback:v=>v+'h'}}}}
+            scales:{x:{grid:{display:false},ticks:{font:{size:7},maxRotation:45}},
+                    y:{beginAtZero:true,grid:{color:'#E9ECEF'},ticks:{font:{size:8},callback:v=>v+'h'}}}}
         });
       }
 
