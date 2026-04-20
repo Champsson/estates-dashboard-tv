@@ -7,8 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-html,body { height:100%; font-family:'Poppins',sans-serif; background:#F8F9FA; color:#212529; overflow:hidden; }
-body { display:flex; flex-direction:column; height:100vh; }
+html { height:100vh; overflow:hidden; }
+body { display:flex; flex-direction:column; height:100vh; overflow:hidden; font-family:'Poppins',sans-serif; background:#F8F9FA; color:#212529; }
 
 @font-face {
   font-family:"FG Rebecca Script";
@@ -35,11 +35,13 @@ body { display:flex; flex-direction:column; height:100vh; }
 
 .kpi-band {
   flex-shrink:0;
+  height:clamp(52px,7.5vh,80px); max-height:clamp(52px,7.5vh,80px);
+  overflow:hidden;
   background:#fff; border-bottom:1px solid #E9ECEF;
   display:flex; align-items:center; justify-content:center;
-  padding:clamp(2px,0.5vh,6px) 10px;
+  padding:0 10px;
 }
-.kpi-stage { display:flex; flex-direction:column; align-items:center; padding:clamp(2px,0.4vh,4px) clamp(6px,1vw,14px); border-right:1px solid #E9ECEF; min-width:0; }
+.kpi-stage { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0 clamp(6px,1vw,14px); border-right:1px solid #E9ECEF; min-width:0; overflow:hidden; flex-shrink:0; }
 .kpi-stage:last-child { border-right:none; }
 .kpi-stage-label { font-size:clamp(6px,0.75vh,8px); color:#6C757D; font-weight:500; text-transform:uppercase; letter-spacing:.5px; }
 .kpi-stage-value { font-size:clamp(13px,1.9vh,20px); font-weight:700; color:#212529; line-height:1.1; }
@@ -59,16 +61,17 @@ body { display:flex; flex-direction:column; height:100vh; }
   padding:clamp(3px,0.5vh,6px) clamp(4px,0.6vw,8px); display:flex; flex-direction:column;
   grid-column:span 2; min-height:0; overflow:hidden;
 }
-.card-title { font-size:clamp(7px,0.8vh,9px); font-weight:600; color:#6C757D; text-transform:uppercase; letter-spacing:.4px; margin-bottom:clamp(2px,0.3vh,4px); flex-shrink:0; }
+.card-title { font-size:clamp(9px,1vh,12px); font-weight:600; color:#6C757D; text-transform:uppercase; letter-spacing:.4px; margin-bottom:clamp(2px,0.3vh,4px); flex-shrink:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .chart-wrap { flex:1 1 0; min-height:0; overflow:hidden; position:relative; }
 .chart-wrap canvas { width:100%!important; height:100%!important; }
 
 @media (max-width:768px) {
-  html,body { height:auto; overflow:auto; }
+  html { height:auto; overflow:auto; }
+  body { height:auto; overflow:auto; }
   .header { height:auto; padding:8px 12px; }
   .logo-img { height:32px; }
-  .kpi-band { flex-wrap:wrap; }
-  .kpi-stage { width:33.33%; border-right:none; border-bottom:1px solid #E9ECEF; }
+  .kpi-band { height:auto; max-height:none; flex-wrap:wrap; overflow:visible; }
+  .kpi-stage { width:33.33%; border-right:none; border-bottom:1px solid #E9ECEF; padding:4px 8px; }
   .kpi-arrow { display:none; }
   .dashboard { grid-template-columns:1fr!important; grid-template-rows:auto!important; height:auto!important; }
   .card { grid-column:span 1!important; min-height:220px; }
@@ -188,7 +191,7 @@ const dataLabelPlugin = {
         data.datasets.reduce((s,ds) => s + (ds.data[i]||0), 0)
       );
       ctx.save();
-      ctx.font = 'bold 7px Poppins,sans-serif';
+      ctx.font = 'bold 10px Poppins,sans-serif';
       ctx.fillStyle = '#212529';
       ctx.textAlign = 'center';
       data.labels.forEach((_, i) => {
@@ -201,7 +204,7 @@ const dataLabelPlugin = {
       ctx.restore();
     } else {
       ctx.save();
-      ctx.font = 'bold 7px Poppins,sans-serif';
+      ctx.font = 'bold 10px Poppins,sans-serif';
       ctx.textAlign = 'center';
       data.datasets.forEach((ds, di) => {
         const meta = chart.getDatasetMeta(di);
@@ -234,10 +237,10 @@ function createThresholdBarChart(canvasId, data, threshold, dir='above') {
       responsive:true, maintainAspectRatio:false, animation:false,
       plugins:{legend:{display:false}, dataLabels:{display:true}},
       scales:{
-        x:{grid:{display:false},ticks:{font:{size:7},maxRotation:45}},
-        y:{beginAtZero:true,grid:{color:'#E9ECEF'},ticks:{precision:0,font:{size:8}}}
+        x:{grid:{display:false},ticks:{font:{size:10},maxRotation:45}},
+        y:{beginAtZero:true,grid:{color:'#E9ECEF'},ticks:{precision:0,font:{size:11}}}
       },
-      layout:{padding:{top:12}}
+      layout:{padding:{top:14}}
     }
   });
 }
@@ -255,12 +258,12 @@ function createStackedBarChart(canvasId, data, colorMap) {
     },
     options:{
       responsive:true, maintainAspectRatio:false, animation:false,
-      plugins:{legend:{display:true,position:'top',labels:{font:{size:7},boxWidth:8,padding:3}}, dataLabels:{display:true}},
+      plugins:{legend:{display:true,position:'top',labels:{font:{size:10},boxWidth:10,padding:4}}, dataLabels:{display:true}},
       scales:{
-        x:{stacked:true,grid:{display:false},ticks:{font:{size:7},maxRotation:45}},
-        y:{stacked:true,beginAtZero:true,grid:{color:'#E9ECEF'},ticks:{precision:0,font:{size:8}}}
+        x:{stacked:true,grid:{display:false},ticks:{font:{size:10},maxRotation:45}},
+        y:{stacked:true,beginAtZero:true,grid:{color:'#E9ECEF'},ticks:{precision:0,font:{size:11}}}
       },
-      layout:{padding:{top:12}}
+      layout:{padding:{top:14}}
     }
   });
 }
@@ -329,8 +332,8 @@ function updateDashboard() {
           options:{responsive:true,maintainAspectRatio:false,animation:false,
             plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+'h'}}, dataLabels:{display:true}},
             layout:{padding:{top:12}},
-            scales:{x:{grid:{display:false},ticks:{font:{size:7},maxRotation:45}},
-                    y:{beginAtZero:true,grid:{color:'#E9ECEF'},ticks:{font:{size:8},callback:v=>v+'h'}}}}
+            scales:{x:{grid:{display:false},ticks:{font:{size:10},maxRotation:45}},
+                    y:{beginAtZero:true,grid:{color:'#E9ECEF'},ticks:{font:{size:11},callback:v=>v+'h'}}}}
         });
       }
 
