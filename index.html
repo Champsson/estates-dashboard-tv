@@ -366,5 +366,32 @@ async function init() { await updateDashboard(); }
 init();
 setInterval(updateDashboard,30000);
 </script>
+<!-- Request info button (added 2026-11-03): e-mails the uncontacted list to an allow-listed address only. Endpoint: mojo-dashboard-request.vercel.app -->
+<style>
+#rq-btn{position:fixed;left:14px;top:clamp(8px,1.2vh,14px);z-index:50;font:600 12px Poppins,sans-serif;background:#fff;color:#212529;border:1px solid #CED4DA;border-radius:8px;padding:6px 12px;cursor:pointer}
+#rq-btn:hover{border-color:#60C0A8;color:#60C0A8}
+#rq-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:60;display:none;align-items:center;justify-content:center}
+#rq-box{background:#fff;border-radius:12px;padding:22px;width:min(360px,90vw);font-family:Poppins,sans-serif;box-shadow:0 10px 40px rgba(0,0,0,.2)}
+#rq-box h3{font-size:16px;margin-bottom:6px}#rq-box p{font-size:12px;color:#6C757D;margin-bottom:12px}
+#rq-email{width:100%;font:14px Poppins,sans-serif;padding:9px 10px;border:1px solid #CED4DA;border-radius:8px}
+#rq-row{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+#rq-row button{font:600 13px Poppins,sans-serif;border-radius:8px;padding:8px 14px;cursor:pointer;border:1px solid #CED4DA;background:#fff}
+#rq-send{background:#60C0A8!important;border-color:#60C0A8!important;color:#fff}
+#rq-msg{font-size:12px;margin-top:10px;min-height:16px}
+</style>
+<button id="rq-btn" type="button">Request info</button>
+<div id="rq-bg"><form id="rq-box"><h3>Request the uncontacted list</h3><p>Enter your email. If it is approved, the spreadsheet is emailed to you.</p>
+<input id="rq-email" type="email" placeholder="you@mojoestates.com" required autocomplete="email">
+<div id="rq-msg"></div><div id="rq-row"><button type="button" id="rq-cancel">Cancel</button><button type="submit" id="rq-send">Send</button></div></form></div>
+<script>
+(function(){var bg=document.getElementById('rq-bg'),f=document.getElementById('rq-box'),m=document.getElementById('rq-msg'),s=document.getElementById('rq-send'),e=document.getElementById('rq-email');
+document.getElementById('rq-btn').onclick=function(){m.textContent='';bg.style.display='flex';e.focus();};
+document.getElementById('rq-cancel').onclick=function(){bg.style.display='none';};
+bg.onclick=function(ev){if(ev.target===bg)bg.style.display='none';};
+f.onsubmit=function(ev){ev.preventDefault();s.disabled=true;m.style.color='#6C757D';m.textContent='Working on it, this takes up to a minute…';
+fetch('https://mojo-dashboard-request.vercel.app/api/request',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({dashboard:'estates',email:e.value})})
+.then(function(r){return r.json();}).then(function(j){m.style.color=j.ok?'#2E8B57':'#C0392B';m.textContent=j.message;})
+.catch(function(){m.style.color='#C0392B';m.textContent='Could not reach the server. Nothing was sent.';}).finally(function(){s.disabled=false;});};})();
+</script>
 </body>
 </html>
